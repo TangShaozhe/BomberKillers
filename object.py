@@ -9,7 +9,8 @@ class Player(pg.sprite.Sprite):
         self.game = game
         self.image = pg.Surface((TILESIZE, TILESIZE))
         #player 's outlook color etc
-        self.image.fill(YELLOW)
+        #self.image.fill(YELLOW)
+        self.image = game.player_img
         self.rect = self.image.get_rect()
         self.x = x
         self.y = y
@@ -29,7 +30,22 @@ class Wall(pg.sprite.Sprite):
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
         self.image = pg.Surface((TILESIZE, TILESIZE))
-        self.image.fill(GREEN)
+        # self.image.fill(GREEN)
+        self.image = game.wall_img
+        self.rect = self.image.get_rect()
+        self.x = x
+        self.y = y
+        self.rect.x = x * TILESIZE
+        self.rect.y = y * TILESIZE
+
+class Box(pg.sprite.Sprite):
+    def __init__(self, game, x, y):
+        self.groups = game.all_sprites, game.walls
+        pg.sprite.Sprite.__init__(self, self.groups)
+        self.game = game
+        self.image = pg.Surface((TILESIZE, TILESIZE))
+        # self.image.fill(GREEN)
+        self.image = game.box_img
         self.rect = self.image.get_rect()
         self.x = x
         self.y = y

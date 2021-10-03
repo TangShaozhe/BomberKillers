@@ -20,6 +20,11 @@ class Game:
 
     def load_data(self):
         game_folder = path.dirname(__file__)
+        img_folder = path.join(game_folder,'image')
+        self.wall_img = pg.image.load(path.join(img_folder,WALL_IMAGE)).convert_alpha()
+        self.background_img = pg.image.load(path.join(img_folder,BACKGROUND_IMAGE)).convert_alpha()
+        self.box_img = pg.image.load(path.join(img_folder,BOX_IMAGE)).convert_alpha()
+        self.player_img = pg.image.load(path.join(img_folder,PLAYER_IMAGE)).convert_alpha()
         self.map_data = []
         with open(path.join(game_folder, 'map/map.txt'), 'rt') as f:
             for line in f:
@@ -34,6 +39,8 @@ class Game:
             for col, tile in enumerate(tiles):
                 if tile == '1':
                     Wall(self, col, row)
+                if tile == '2':
+                    self.player = Box(self, col, row)
                 if tile == 'P':
                     self.player = Player(self, col, row)
 
@@ -78,7 +85,8 @@ class Game:
     def draw(self):
         # Game loop - draw
         # Draw / render
-        self.screen.fill(DARKGREY)
+        #self.screen.fill(DARKGREY)
+        self.screen.blit(self.background_img,[0,0])
         self.draw_grid()
         self.all_sprites.draw(self.screen)
         # * after drawing everything , flip the display

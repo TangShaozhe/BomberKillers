@@ -8,7 +8,7 @@ DARKGREY = (40,40,40)
 LIGHTGREY = (100,100,100)
 YELLOW = (255,255,0)
 
-
+10
 # game setting
 TITLE = "BomberKillers"
 
@@ -22,3 +22,9 @@ BGCOLOR= DARKGREY
 TILESIZE = 32
 GRIDWIDTH =  WIDTH / TILESIZE
 GRIDHEIGHT = HEIGHT / TILESIZE
+
+# image
+WALL_IMAGE = 'wall.png'
+BACKGROUND_IMAGE = 'background.png'
+BOX_IMAGE = 'box.png'
+PLAYER_IMAGE = 'player.png'
