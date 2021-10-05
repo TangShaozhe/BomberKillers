@@ -33,7 +33,7 @@ class Game:
         with open(path.join(game_folder, 'map/map.txt'), 'rt') as f:
             for line in f:
                 self.map_data.append(line[:-1])
-        print(self.map_data) = []
+        print(self.map_data)
 
     def new(self):
         # start a new game
@@ -78,15 +78,20 @@ class Game:
                         print(self.map_data[self.player.zuobiaoy()])
                         self.bomb.append(Bomb(self.player.zuobiaox(),self.player.zuobiaoy(),self.screen,self.map_data))
                 if event.key == pg.K_ESCAPE:
-                    self.quit()
-                if event.key == pg.K_LEFT:
-                    self.player.move (dx=-1)
+                    self.quit() 
+                   # deal with the collide problem, set conditions for moving 
+                if event.key == pg.K_LEFT: 
+                    if self.map_data[self.player.y][self.player.x-1]!="1"and self.map_data[self.player.y][self.player.x-1]!="2" and self.map_data[self.player.y][self.player.x-1]!="3":
+                        self.player.move (dx=-1)
                 if event.key == pg.K_RIGHT:
-                    self.player.move (dx=1)
+                    if self.map_data[self.player.y][self.player.x+1]!="1" and self.map_data[self.player.y][self.player.x+1]!="2"and self.map_data[self.player.y][self.player.x+1]!="3":
+                        self.player.move (dx=1)
                 if event.key == pg.K_UP:
-                    self.player.move (dy=-1)
+                    if self.map_data[self.player.y-1][self.player.x]!="1" and self.map_data[self.player.y-1][self.player.x]!="2"and self.map_data[self.player.y-1][self.player.x]!="3":
+                        self.player.move (dy=-1)
                 if event.key == pg.K_DOWN:
-                    self.player.move (dy=1)
+                    if self.map_data[self.player.y+1][self.player.x]!="1"and self.map_data[self.player.y+1][self.player.x]!="2"and self.map_data[self.player.y+1][self.player.x]!="3":
+                        self.player.move (dy=1)
 
     def draw_grid(self):
         for x in range(0,WIDTH,TILESIZE):
@@ -101,6 +106,16 @@ class Game:
         self.screen.blit(self.background_img,[0,0])
         self.draw_grid()
         self.all_sprites.draw(self.screen)
+
+        #setting time for bombing
+        for i in self.bomb:
+            if i.time<=70:
+                self.map_data[i.y]=self.map_data[i.y][:i.x]+"."+self.map_data[i.y][i.x+1:]
+            if i.time==0:
+                self.bomb.remove(i)
+            else:
+                print(i.left,i.right)
+                i.update()
         # * after drawing everything , flip the display
         pg.display.flip()
 
