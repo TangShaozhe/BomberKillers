@@ -78,6 +78,17 @@ class Bomb(pg.sprite.Sprite):
         self.time-=1
         if self.time<=70:
             self.screen.blit(self.baozhaxiaoguo,(self.x*32,self.y*32))
+            #bomb range and effect
+            for i in range(-1*self.fanwei,1+2*self.fanwei):
+                if self.ditu[self.y][self.x+i]=="1":
+                    if i<0:
+                        self.left=i+1
+                    elif i>0:
+                        self.right=i
+                if i!=0 and self.ditu[self.y+i][self.x]!="1":
+                    self.screen.blit(self.baozhaxiaoguo,((self.x)*32,(self.y+i)*32))
+            for i in range(self.left, self.right):
+                self.screen.blit(self.baozhaxiaoguo, ((self.x + i) * 32, self.y * 32))
             
         else:
             self.screen.blit(self.image,(self.x*32,self.y*32))
