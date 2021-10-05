@@ -7,6 +7,7 @@ from object import *
 
 class Game:
     def __init__(self):
+    
         # initialize game window, etc...
         pg.init()
         pg.mixer.init()
