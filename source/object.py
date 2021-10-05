@@ -51,3 +51,14 @@ class Box(pg.sprite.Sprite):
         self.y = y
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
+
+class Bomb(pg.sprite.Sprite):
+    def __init__(self,game,x,y,explode):
+        self.group = game.all_sprites, game.bombs
+        pg.sprite.Sprite.__init__(self,self.groups)
+        self.game = game
+        self.image = pg.Surface((TILESIZE, TILESIZE))
+        self.image = game.bomb_img
+        self.explode = explode
+        self.rect = self.image.get_rect()
+

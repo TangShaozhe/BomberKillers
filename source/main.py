@@ -7,7 +7,7 @@ from object import *
 
 class Game:
     def __init__(self):
-        # initalize game window, etc...
+        # initialize game window, etc...
         pg.init()
         pg.mixer.init()
         self.screen = pg.display.set_mode((WIDTH,HEIGHT))
@@ -17,6 +17,9 @@ class Game:
         pg.key.set_repeat(500, 100)
         self.load_data()
         self.running = True
+        self.bomb = []
+        self.cunfang = ""
+        #32x24
 
     def load_data(self):
         game_folder = path.dirname(__file__)
@@ -25,10 +28,12 @@ class Game:
         self.background_img = pg.image.load(path.join(img_folder,BACKGROUND_IMAGE)).convert_alpha()
         self.box_img = pg.image.load(path.join(img_folder,BOX_IMAGE)).convert_alpha()
         self.player_img = pg.image.load(path.join(img_folder,PLAYER_IMAGE)).convert_alpha()
+        self.bomb_img = pg.image.load(path.join(img_folder,BOMB_IMAGE)).convert_alpha()
         self.map_data = []
         with open(path.join(game_folder, 'map/map.txt'), 'rt') as f:
             for line in f:
-                self.map_data.append(line)
+                self.map_data.append(line[:-1])
+        print(self.map_data) = []
 
     def new(self):
         # start a new game
@@ -65,6 +70,13 @@ class Game:
             if event.type == pg.QUIT:
                 self.quit()
             if event.type == pg.KEYDOWN:
+                for i in self.map_data:
+                    print(i)
+                if event.key == pg.K_SPACE: # press space for produce bombs 
+                    if self.map_data[self.player.zuobiaoy()][self.player.zuobiaox()-1]!="3" and len(self.bomb)<6:#max 5 bombs
+                        self.map_data[self.player.zuobiaoy()]=self.map_data[self.player.zuobiaoy()][:self.player.zuobiaox()]+"3"+self.map_data[self.player.zuobiaoy()][self.player.zuobiaox()+1:]
+                        print(self.map_data[self.player.zuobiaoy()])
+                        self.bomb.append(Bomb(self.player.zuobiaox(),self.player.zuobiaoy(),self.screen,self.map_data))
                 if event.key == pg.K_ESCAPE:
                     self.quit()
                 if event.key == pg.K_LEFT:
