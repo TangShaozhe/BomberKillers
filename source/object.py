@@ -73,6 +73,7 @@ class Bomb(pg.sprite.Sprite):
         self.top=-self.fanwei
         self.down=self.fanwei
         #32x32
+    
     def update(self):
         self.time-=1
         if self.time<=70:
