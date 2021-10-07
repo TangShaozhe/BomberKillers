@@ -11,6 +11,8 @@ class Game:
         # initialize game window, etc...
         pg.init()
         pg.mixer.init()
+        self.music=pg.mixer.music.load("sound/bgm.mp3")
+        pg.mixer.music.play(-1)
         self.screen = pg.display.set_mode((WIDTH,HEIGHT))
         pg.display.set_caption(TITLE)
         self.clock = pg.time.Clock()
@@ -132,6 +134,7 @@ g.show_start_screen()
 while g.running:
     g.new()
     g.run()
+    g.sound()
     g.show_go_screen()
 
 pg.quit()
