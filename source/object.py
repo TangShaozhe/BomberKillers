@@ -1,5 +1,7 @@
 import pygame as pg
-from settings import *
+import sys
+sys.path.append("..")
+from source.settings import *
 
 
 class Player(pg.sprite.Sprite):
