@@ -1,2 +1,4 @@
-py Test_Objects.py
+cd ..
+cd test
+py test_objects.py
 pause
