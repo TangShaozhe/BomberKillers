@@ -29,3 +29,7 @@ BACKGROUND_IMAGE = 'background.png'
 BOX_IMAGE = 'box.png'
 PLAYER_IMAGE = 'player.png'
 BOMB_IMAGE = 'bomb.png'
+FIRE_IMAGE = 'fire.png'
+
+# music
+BGM = 'bgm.mp3'

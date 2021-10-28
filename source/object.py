@@ -61,11 +61,12 @@ class Box(pg.sprite.Sprite):
         self.rect.y = y * TILESIZE
 
 class Bomb(pg.sprite.Sprite):
-    def __init__(self,x,y,screen,ditu):
+    def __init__(self,game,x,y,screen,ditu):
         self.ditu=ditu
         self.screen=screen
-        self.image=pg.image.load("image/bomb.png")
-        self.baozhaxiaoguo=pg.image.load("image/fire.png")
+        self.game=game
+        self.image=game.bomb_img
+        self.baozhaxiaoguo=game.fire_img
         self.time=200#爆炸time
         self.x=x
         self.y=y
