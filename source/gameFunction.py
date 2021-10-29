@@ -57,6 +57,46 @@ def load_data(self):
                 self.map_data.append(line[:-1])
         print(self.map_data)
 
+def new(self):
+        # start a new game
+        self.playing = True
+        self.all_sprites = pg.sprite.Group()
+        # set location of player
+        self.walls = pg.sprite.Group()
+        for row, tiles in enumerate(self.map_data):
+            for col, tile in enumerate(tiles):
+                if tile == '1':
+                    Wall(self, col, row)
+                # 其他的用不到的我不用继承了,1麻烦2写不出太突出的东西
+                if tile == "2":
+                    self.box_list.append(Box(self,self.screen,col,row))
+                
+                #if tile == 'P':
+                    #self.player_play= Player(self,3,21,self.screen)
+                
+        for i in range(0,10):
+            self.robot_list.append(Robot(self,self.screen,self.map_data))
+        self.player_play=Player(self,3,21,self.screen)
+
+    def run(self):
+        # Game loop
+
+        self.playing = True
+        while self.playing:
+            self.dt=self.clock.tick(FPS)
+            
+
+            self.update()
+            
+            self.draw()
+            
+            self.events()
+
+    def update(self):
+        # Game loop - update
+        self.all_sprites.update()
+
+
 
 
 
