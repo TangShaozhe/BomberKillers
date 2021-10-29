@@ -152,3 +152,70 @@ class Bomb():
             else:
                 self.screen.blit(self.image,(self.x*32,self.y*32))
 
+class Robot():
+    def __init__(self,game,screen,ditu):#人机自带x,y不需要
+        self.screen=screen
+        self.ditu=ditu
+        self.game = game
+        
+        
+        self.image=game.monster_img_one
+        self.image1=game.monster_img_two
+        self.hp=2#代表血量
+        self.fx=0#表示方向
+        self.time=100
+        self.shanshuo_zhen = 0
+        self.cishu = 15
+        self.time1 = 8
+        self.fanwei=2
+        self.shuliang=1
+        while True:
+            self.y=random.randint(1,len(self.ditu)-1)
+            self.x=random.randint(1,len(self.ditu)-1)
+            if self.ditu[self.y][self.x] == ".":
+                break
+    def move(self,ditu):
+        self.time-=1
+        if self.time==0:
+            self.time=random.randint(50,120)
+            self.fx=random.randint(1,4)
+        if self.fx>0:
+            self.ditu=ditu
+            if self.fx==1:
+                if self.ditu[self.y][self.x-1]==".":
+                    self.x-=1
+            elif self.fx==2:
+                if self.ditu[self.y-1][self.x] == ".":
+                    self.y -= 1
+            elif self.fx==3:
+                if self.ditu[self.y][self.x+1] == ".":
+                    self.x += 1
+            elif self.fx==4:
+                if self.ditu[self.y+1][self.x] == ".":
+                    self.y += 1
+            self.fx=0
+    def suiji(self):
+        return random.randint(1,4)
+    def fangzhi_zhadan(self):
+        a=random.randint(1,1000)
+        if a == 1:
+            return True
+    def hurt(self):
+        self.shanshuo_zhen=1
+        self.hp-=1
+    def update(self,ditu):
+        self.move(ditu)
+        if self.shanshuo_zhen == 1:
+            self.time1 -= 1
+            if self.time1 == 0:
+                self.cishu -= 1
+                self.time1 = 8
+                if self.cishu == 0:
+                    self.shanshuo_zhen=0
+                    self.cishu=15
+            if self.cishu % 2 == 1:
+                self.screen.blit(self.image,(self.x*32,self.y*32))
+            else:
+                self.screen.blit(self.image1,(self.x*32,self.y*32))
+        else:
+            self.screen.blit(self.image, (self.x*32, self.y*32))
