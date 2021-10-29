@@ -1,32 +1,51 @@
+import random
 import pygame as pg
 import sys
+#from os import path
 sys.path.append("..")
 from source.settings import *
 
 
-class Player(pg.sprite.Sprite):
-    def __init__(self, game, x, y):
-        self.groups = game.all_sprites
-        pg.sprite.Sprite.__init__(self, self.groups)
+class Player():
+    def __init__(self,game, x, y,screen):
+        self.screen = screen
         self.game = game
-        self.image = pg.Surface((TILESIZE, TILESIZE))
+        self.image = game.player_img_one
+        self.image1 = game.player_img_two
         #player 's outlook color etc
         #self.image.fill(YELLOW)
-        self.image = game.player_img
         self.rect = self.image.get_rect()
         self.x = x
         self.y = y
+        self.hp = 2
+        self.shanshuo_zhen = 0
+        self.cishu = 15
+        self.time = 8
+        self.fanwei = 1#bomb range
+        self.shuliang = 1#bomb number
     # move the player function
-
     def move(self, dx=0, dy=0):
         self.x += dx
         self.y += dy
-
+    def hurt(self):
+        self.shanshuo_zhen = 1
     def update(self):
         self.rect.x = self.x * TILESIZE
         self.rect.y = self.y * TILESIZE
-
-    #define the coordinators
+        if self.shanshuo_zhen == 1:
+            self.time -= 1
+            if self.time == 0:
+                self.cishu -= 1
+                self.time = 8
+                if self.cishu == 0:
+                    self.shanshuo_zhen=0
+                    self.cishu=15
+            if self.cishu % 2 == 1:
+                self.screen.blit(self.image,(self.rect.x,self.rect.y))
+            else:
+                self.screen.blit(self.image1,(self.rect.x,self.rect.y))
+        else:
+            self.screen.blit(self.image, (self.rect.x, self.rect.y))
     def zuobiaox(self):
         return self.x
     def zuobiaoy(self):
