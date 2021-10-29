@@ -22,7 +22,7 @@ class Test_Game(unittest.TestCase):
         def keyInput():
             print("start try to runGame")
             #keyboard = Controller()
-            time.sleep(2)
+            time.sleep(2.5)
             #keyboard.press('a')
             #keyboard.press(Key.esc)
             #keyboard.release(Key.esc)
