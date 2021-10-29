@@ -219,3 +219,26 @@ class Robot():
                 self.screen.blit(self.image1,(self.x*32,self.y*32))
         else:
             self.screen.blit(self.image, (self.x*32, self.y*32))
+
+class Daoju():
+    def __init__(self,game,screen,x,y,id):
+        self.screen=screen
+        self.game = game
+        self.image=game.props_img
+        self.image1=game.yaoshui_img
+        
+        self.x=x
+        self.y=y
+        self.pianyi=0#y轴移动
+        self.bianliang=0.15
+        self.daoju=None
+        self.id=id
+        if self.id==1:#1为炸弹数量
+            self.daoju=self.image
+        elif self.id==2:#2为炸弹范围
+            self.daoju=self.image1
+    def update(self):
+        if self.pianyi<=-15 or self.pianyi>=0:
+            self.bianliang=-self.bianliang
+        self.pianyi+=self.bianliang
+        self.screen.blit(self.daoju,(self.x*32,self.y*32+self.pianyi))
