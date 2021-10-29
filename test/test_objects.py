@@ -1,6 +1,7 @@
 import pygame as pg
 import unittest
 import sys
+import time
 import random
 
 sys.path.append("..")
