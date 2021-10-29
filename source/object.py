@@ -65,19 +65,18 @@ class Wall(pg.sprite.Sprite):
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
 
-class Box(pg.sprite.Sprite):
-    def __init__(self, game, x, y):
-        self.groups = game.all_sprites, game.walls
-        pg.sprite.Sprite.__init__(self, self.groups)
+class Box():
+    def __init__(self,game, screen, x, y):
+        
+        self.screen=screen
         self.game = game
-        self.image = pg.Surface((TILESIZE, TILESIZE))
-        # self.image.fill(GREEN)
         self.image = game.box_img
-        self.rect = self.image.get_rect()
         self.x = x
         self.y = y
-        self.rect.x = x * TILESIZE
-        self.rect.y = y * TILESIZE
+    def update(self):
+        self.screen.blit(self.image,(self.x*32,self.y*32))
+    def suiji(self):
+        return random.randint(1,4)
 
 class Bomb(pg.sprite.Sprite):
     def __init__(self,game,x,y,screen,ditu):
