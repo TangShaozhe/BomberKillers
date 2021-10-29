@@ -78,39 +78,77 @@ class Box():
     def suiji(self):
         return random.randint(1,4)
 
-class Bomb(pg.sprite.Sprite):
-    def __init__(self,game,x,y,screen,ditu):
+class Bomb():
+    def __init__(self,game,x,y,screen,ditu,fanwei,msg):
         self.ditu=ditu
         self.screen=screen
+        self.msg=msg
         self.game=game
         self.image=game.bomb_img
+        self.guaishou_image=game.monster_bomb_img
+        
         self.baozhaxiaoguo=game.fire_img
         self.time=200#爆炸time
         self.x=x
         self.y=y
-        self.fanwei=2
+        self.fanwei=fanwei#泡泡范围
         self.left=-self.fanwei
-        self.right=self.fanwei
+        self.right=self.fanwei+1
         self.top=-self.fanwei
-        self.down=self.fanwei
+        self.down=self.fanwei+1
+        self.jilu_baozha_list=[]
         #32x32
-    
+    def list(self):
+        return self.jilu_baozha_list
     def update(self):
+        #4边检查箱子就不要-1
         self.time-=1
-        if self.time<=70:
-            self.screen.blit(self.baozhaxiaoguo,(self.x*32,self.y*32))
-            #bomb range and effect
-            
-            for i in range(-1*self.fanwei,1+2*self.fanwei):
-                if self.ditu[self.y][self.x+i]=="1":
-                    if i<0:
-                        self.left=i+1
-                    elif i>0:
-                        self.right=i
-                if i!=0 and self.ditu[self.y+i][self.x]!="1":
-                    self.screen.blit(self.baozhaxiaoguo,((self.x)*32,(self.y+i)*32))
+        if self.time<70:
+            for i in range(self.top, self.down):
+                if i != 0:
+                    self.screen.blit(self.baozhaxiaoguo, ((self.x) * 32, (self.y + i) * 32))
             for i in range(self.left, self.right):
                 self.screen.blit(self.baozhaxiaoguo, ((self.x + i) * 32, self.y * 32))
-            
+        elif self.time==70:
+            self.screen.blit(self.baozhaxiaoguo,(self.x*32,self.y*32))
+            for i in range(-1,-1*self.fanwei-1,-1):
+                if self.ditu[self.y][self.x+i] == "1":
+                    self.left = i+1
+                    break
+                elif self.ditu[self.y][self.x+i] == "2":
+                    self.left= i
+                    break
+            for i in range(0,1*self.fanwei+1):
+                if self.ditu[self.y][self.x+i] == "1" :
+                    self.right = i
+                    break
+                elif self.ditu[self.y][self.x+i] == "2":
+                    self.right= i+1
+                    break
+            for i in range(-1,-1*self.fanwei-1,-1):
+                if self.ditu[self.y+i][self.x] == "1":
+                    self.top = i+1
+                    break
+                elif self.ditu[self.y+i][self.x] == "2":
+                    self.top= i
+                    break
+            for i in range(0,1*self.fanwei+1):
+                if self.ditu[self.y+i][self.x] == "1" :
+                    self.down = i
+                    break
+                elif self.ditu[self.y+i][self.x] == "2":
+                    self.down= i+1
+                    break
+            for i in range(self.top,self.down):
+                    if i!=0:
+                        self.jilu_baozha_list.append([self.x,self.y+i])
+                        self.screen.blit(self.baozhaxiaoguo,((self.x)*32,(self.y+i)*32))
+            for i in range(self.left, self.right):
+                self.jilu_baozha_list.append([self.x+i, self.y])
+                self.screen.blit(self.baozhaxiaoguo, ((self.x + i) * 32, self.y * 32))
         else:
-            self.screen.blit(self.image,(self.x*32,self.y*32))
+            if self.msg == "guaishou":
+                self.screen.blit(self.guaishou_image,(self.x*32,self.y*32))
+            else:
+                self.screen.blit(self.image,(self.x*32,self.y*32))
+
