@@ -95,7 +95,51 @@ def new(self):
     def update(self):
         # Game loop - update
         self.all_sprites.update()
-
+def events(self):
+        # Game loop - events
+        for event in pg.event.get():
+        # check for closing the window
+            if event.type == pg.QUIT:
+                self.running = False
+                self.playing = False
+                pg.quit()
+                #sys.exit()
+            if event.type == pg.KEYDOWN:
+                if event.key==pg.K_SPACE:
+                    if self.map_data[self.player_play.zuobiaoy()][self.player_play.zuobiaox()]!="3" and self.map_data[self.player_play.zuobiaoy()][self.player_play.zuobiaox()]!="4" and self.bomb_shuliang<self.player_play.shuliang:#最大五个炸弹
+                        self.bomb_shuliang+=1
+                        print(self.player_play.shuliang)
+                        self.x+=1
+                        print(self.map_data[self.player_play.zuobiaoy()][:self.player_play.zuobiaox()]+"3"+self.map_data[self.player_play.zuobiaoy()][self.player_play.zuobiaox()+1:])
+                        self.map_data[self.player_play.zuobiaoy()]=self.map_data[self.player_play.zuobiaoy()][:self.player_play.zuobiaox()]+"3"+self.map_data[self.player_play.zuobiaoy()][self.player_play.zuobiaox()+1:]
+                        self.bomb.append(Bomb(self,self.player_play.zuobiaox(),self.player_play.zuobiaoy(),self.screen,self.map_data,self.player_play.fanwei,"123"))
+                if event.key == pg.K_ESCAPE:
+                    self.running = False
+                    self.playing = False
+                    pg.quit()
+                    #sys.exit()
+                if event.key == pg.K_LEFT:
+                    if self.map_data[self.player_play.y][self.player_play.x-1]!="1"and self.map_data[self.player_play.y][self.player_play.x-1]!="2" and self.map_data[self.player_play.y][self.player_play.x-1]!="3":
+                        self.player_play.move (dx=-1)
+                elif event.key == pg.K_RIGHT:
+                    if self.map_data[self.player_play.y][self.player_play.x+1]!="1" and self.map_data[self.player_play.y][self.player_play.x+1]!="2"and self.map_data[self.player_play.y][self.player_play.x+1]!="3":
+                        self.player_play.move (dx=1)
+                elif event.key == pg.K_UP:
+                    if self.map_data[self.player_play.y-1][self.player_play.x]!="1" and self.map_data[self.player_play.y-1][self.player_play.x]!="2"and self.map_data[self.player_play.y-1][self.player_play.x]!="3":
+                        self.player_play.move (dy=-1)
+                elif event.key == pg.K_DOWN:
+                    if self.map_data[self.player_play.y+1][self.player_play.x]!="1"and self.map_data[self.player_play.y+1][self.player_play.x]!="2"and self.map_data[self.player_play.y+1][self.player_play.x]!="3":
+                         self.player_play.move (dy=1)
+                if self.map_data[self.player_play.y][self.player_play.x] == "4":
+                    self.player_play.hurt()
+                if len(self.daoju_list)>0:
+                    for j in self.daoju_list:
+                        if self.player_play.x == j.x and self.player_play.y == j.y:
+                            if j.id == 1:
+                                self.player_play.shuliang+=1
+                            elif j.id == 2:
+                                self.player_play.fanwei += 1
+                            self.daoju_list.remove(j)
 
 
 
