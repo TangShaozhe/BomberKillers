@@ -3,7 +3,7 @@ import unittest
 import os
 import sys
 sys.path.append("..")
-from source.object import Player
+from source.object import Player, Robot
 
 
 # Test all of game objects etc. Player bomb and so on
@@ -33,30 +33,26 @@ class Test_Objects(unittest.TestCase):
 
     print('Test player movement')
 
-    def test_Player_update(self):
+    def test_Bot_hp(self):
         
         # test player loc in px sample: x=5 y=10 in px is 160px and 320px
-        self.x = 5
-        self.y = 10
-        TILESIZE = 32
-        self.image = pg.Surface((TILESIZE, TILESIZE))
-        self.rect = self.image.get_rect()
-        Player.update(self)
-        self.assertEqual(self.rect.x, 160)
-        self.assertEqual(self.rect.y, 320)
+        self.shanshuo_zhen = 1
+        self.hp = 20
+        Robot.hurt(self)
+        self.assertEqual(self.hp,19)
 
-        self.x = 20
-        self.y = 11
-        Player.update(self)
-        self.assertEqual(self.rect.x, 640)
-        self.assertEqual(self.rect.y, 352)      
         
-        self.x = 31
-        self.y = 29
-        Player.update(self)
-        self.assertEqual(self.rect.x, 992)
-        self.assertEqual(self.rect.y, 928)  
-    print('Test player location update')
+        self.hp = 39
+        Robot.hurt(self)
+        self.assertEqual(self.hp,38)
+
+       
+        self.hp = 27
+        Robot.hurt(self)
+        self.assertEqual(self.hp,26)
+
+        
+    print('Test bot hp update')
 
 if __name__ == '__main__':
     unittest.main()
