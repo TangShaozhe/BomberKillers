@@ -79,18 +79,25 @@ class Button():
         return action
 #play  = Button(75,100,"Play")
 play_again = Button(75,100, "Play Again")
-quit = Button(75,180,"Quit")
-instruction = Button(75,260,"Instruction")
+play_vs_bot = Button(75,175,"Player vs Bot")
+instruction = Button(75,250,"Instruction")
+quit = Button(75,325,"Quit")
 
 
 while screen_On:
     screen.blit(background,(0,0))
+    #if the Player want to play game again
     if play_again.draw_Button():
         print("Play Again")
         cnt = 0
+    #if playe want to quit the Game    
     if quit.draw_Button():
         print("Quit")
         pygame.quit()
+    #if player and bot want to play game between them
+    if play_vs_bot.draw_Button():
+        print("Player are Bot are palying the game")    
+    #if you want to see the instructions and rules for the game    
     if instruction.draw_Button():
         print("Instruction")
 
