@@ -25,7 +25,6 @@ def showIntruction():
     button.place(x=200, y=350)
     root.mainloop()
 
-
 button1 = Button(root,height=1,width=15,text='PlayGame', fg='maroon',command=playgame,activebackground="teal",bd=2,font='arial 14 bold')
 button1.pack()
 button1.place(x=200, y=100)
