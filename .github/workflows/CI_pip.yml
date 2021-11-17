@@ -44,6 +44,7 @@ jobs:
         run: |
           cd report
           coverage run ../test/test_Game.py
+          coverage report -m
           coverage html -d coverage-report
 
       - name: Test with pytest
