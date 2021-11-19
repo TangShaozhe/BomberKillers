@@ -43,7 +43,7 @@ def Lint_with_flake8():
 
 def coverage_with_report():
     try:
-        if os.system("cd ..&&cd report&&coverage run ../test/test_Game.py&&coverage html -d coverage-report") != 0:
+        if os.system("cd ..&&cd report&&coverage run ../test/test_Game.py&&coverage report -m&&coverage html -d coverage-report&&cd coverage-report&&del /f .gitignore") != 0:
             raise Exception('Have problem when coverage with report')
     except Exception as e:
         print(e)
