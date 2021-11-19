@@ -36,6 +36,7 @@ MONSTER_IMG_ONE = 'monster.png'
 MONSTER_IMG_TWO = 'monster1.png'
 PROPS_IMG = 'props.png'
 YAOSHUI_IMG ='yaoshui.png'
+PLAYER_IMAGE = 'player.png'
 
 #sound
 MUSIC_FIRST = '1.mp3'
