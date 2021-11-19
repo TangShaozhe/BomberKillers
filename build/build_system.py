@@ -21,7 +21,7 @@ def install_pip():
 
 def install_pip_plugin():
     try:
-        if os.system("pip install flake8 pytest pygame") != 0:
+        if os.system("pip install flake8 flake8-html coverage pytest pygame") != 0:
             raise Exception('Have problem when installing pip plugin')
     except Exception as e:
         print(e)
@@ -35,15 +35,23 @@ def Lint_with_flake8():
         print(e)
         print("plz try to solve it!")
     try:
-        if os.system("flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics") != 0:
+        if os.system("cd ..&&flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics --format=html --htmldir=report/flake-report") != 0:
             raise Exception('Have problem when Linting')
+    except Exception as e:
+        print(e)
+        print("plz try to solve it!")
+
+def coverage_with_report():
+    try:
+        if os.system("cd ..&&cd report&&coverage run ../test/test_Game.py&&coverage report -m&&coverage html -d coverage-report&&cd coverage-report&&del /f .gitignore") != 0:
+            raise Exception('Have problem when coverage with report')
     except Exception as e:
         print(e)
         print("plz try to solve it!")
 
 def test_with_pytest():
     try:
-        if os.system("cd ..&& cd test && pytest") != 0:
+        if os.system("cd ..&&cd test && pytest") != 0:
             raise Exception('Have problem when pytest')
     except Exception as e:
         print(e)
@@ -56,6 +64,8 @@ time.sleep(0.5)
 install_pip_plugin()
 time.sleep(0.5)
 Lint_with_flake8()
+time.sleep(1)
+coverage_with_report()
 time.sleep(0.5)
 test_with_pytest()
 
