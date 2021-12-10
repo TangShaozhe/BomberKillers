@@ -2,9 +2,9 @@ from setuptools import setup, find_packages
 
 setup(
     name='BomberKillers',
-    version='0.0.1',
-    author="Sun Yilong",
-    author_email='sunjerry@yahoo.com',
+    version='0.0.3',
+    author="Sun Yilong,Tang Shaozhe,Li Zhipeng,Ramzan Muhammad",
+    author_email='bcfogs@inf.elte.hu,qs4oz8@inf.elte.hu,g31r6t@inf.elte.hu,pn8uom@inf.elte.hu',
     packages=find_packages('source'),
     package_dir={'': 'source'},
 	py_modules=["main","object","settings","yonghu","yonghu2"],
