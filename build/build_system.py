@@ -35,7 +35,7 @@ def Lint_with_flake8():
         print(e)
         print("plz try to solve it!")
     try:
-        if os.system("cd ..&&flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics --format=html --htmldir=report/flake-report") != 0:
+        if os.system("cd ..&&flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics") != 0:
             raise Exception('Have problem when Linting')
     except Exception as e:
         print(e)
@@ -43,7 +43,7 @@ def Lint_with_flake8():
 
 def coverage_with_report():
     try:
-        if os.system("cd ..&&cd report&&coverage run ../test/test_Game.py&&coverage report -m&&coverage html -d coverage-report&&cd coverage-report&&del /f .gitignore") != 0:
+        if os.system("cd ..&&cd report&&coverage run ../test/test_objects.py&&coverage report -m") != 0:
             raise Exception('Have problem when coverage with report')
     except Exception as e:
         print(e)
