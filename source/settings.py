@@ -19,7 +19,7 @@ BGCOLOR= DARKGREY
 
 
 
-TILESIZE = 32
+TILESIZE = 33
 GRIDWIDTH =  WIDTH / TILESIZE
 GRIDHEIGHT = HEIGHT / TILESIZE
 
@@ -27,17 +27,4 @@ GRIDHEIGHT = HEIGHT / TILESIZE
 WALL_IMAGE = 'wall.png'
 BACKGROUND_IMAGE = 'background.png'
 BOX_IMAGE = 'box.png'
-PLAYER_IMAGE_ONE = 'player.png'
-PLAYER_IMAGE_TWO = 'player1.png'
-BOMB_IMG = 'bomb.png'
-MONSTER_BOMB_IMG = 'guaishou_bomb.png'
-FIRE_IMG = 'fire.png'
-MONSTER_IMG_ONE = 'monster.png'
-MONSTER_IMG_TWO = 'monster1.png'
-PROPS_IMG = 'props.png'
-YAOSHUI_IMG ='yaoshui.png'
 PLAYER_IMAGE = 'player.png'
-
-#sound
-MUSIC_FIRST = '1.mp3'
-MUSIC_SECOND = '2.mp3'
