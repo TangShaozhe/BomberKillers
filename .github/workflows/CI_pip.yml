@@ -43,7 +43,7 @@ jobs:
       - name: Coverage and output report
         run: |
           cd report
-          coverage run ../test/test_Game.py
+          coverage run ../test/test_objects.py
           coverage report -m
 
       - name: Test with pytest
