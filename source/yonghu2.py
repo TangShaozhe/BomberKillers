@@ -21,50 +21,48 @@ class Game:
         self.clock = pg.time.Clock()
         # Let the key press down
         pg.key.set_repeat(500, 100)
-        #main界面
+        #main interface
         self.mian_jiemian=pg.image.load("image/mainground.png")
         self.chuangjian_fj1=pg.image.load("BNB/xz1.png")
         self.chuangjian_fj2=pg.image.load("BNB/xz2.png")
         self.room=pg.image.load("BNB/room.png")
         self.black=pg.image.load("BNB/black.png")
         #
-        #创建房间初始化(你是房主)
+        #
         self.sever=None
         self.client=None
         self.msg=""
         self.lianjie=False
         self.box_msg=""
         self.change_xinxi=False
-        #房间数据
+        
         self.thread=None
         self.player_msg_list=[]
-        #开始游戏()
+        
         self.player_play_list=[]
-        #游戏人物信息框
+       
         self.play_imformation_list=[]
         self.play_imformation_kuang=pg.image.load("image/play_imformation/play information box.png")
-        #重要的数据包
-        # 1是移动 2是放置炸弹 3是人机位置 4是怪物炸弹 5是刷新道具 6是拾取道具 7是墙的摧毁
-        #用这种方式可以取消使用人物拾取道具的动作
-        self.bomb_sjb="2|"#炸弹[数据包]
-        self.daoju_sjb = "5|"  # 道具[数据包]
-        self.robot_sjb = "3|"  # 机器人[数据包]
-        self.robot_bomb_sjb = "4|"  # 机器人炸弹[数据包]
-        self.box_sjb = "7|"  # 箱子[数据包]
+        
+        self.bomb_sjb="2|"
+        self.daoju_sjb = "5|"  
+        self.robot_sjb = "3|"  
+        self.robot_bomb_sjb = "4|"  
+        self.box_sjb = "7|"  
         #
         self.zhen=255
         self.wall_list=[]
-        self.daoju_list=[]# 道具
-        self.robot_list=[]# 机器人
-        self.robot_bomb=[]# 机器人炸弹
-        self.box_list=[]# 箱子
+        self.daoju_list=[]
+        self.robot_list=[]
+        self.robot_bomb=[]
+        self.box_list=[]
         self.load_data()
         self.running = True
-        self.bomb=[]#玩家炸弹
+        self.bomb=[]
         self.cunfang=""
         self.bomb_shuliang=0
         self.jiemian=0
-        #玩家皮肤信息
+        
         self.player_index=0
         self.name=""
         self.x=0
@@ -72,10 +70,7 @@ class Game:
         self.choice_name()
         #32x24
         #pg.mixer.music.play(-1)
-        """
-        if pygame.mixer.music.get_busy() == False: #检查是否正在播放音乐
-            pygame.mixer.music.play() #开始播放音乐流
-        """
+       
     def choice_name(self):
         self.name=random.choice(["Clever ","Naughty ","Handsome "," violent ","rich ","low-key ","steady ","Jovial"])+random.choice(["Duck","pig","froggy","John Doe","Passerby B","Bystander C","Xiao Ming","Xiao Hong","Xiao Zhang","Xiao Pao"])
     def receive(self):
@@ -93,8 +88,7 @@ class Game:
                         self.player_play1.x = int(msg.split("|")[1].split(",")[0])
                         self.player_play1.y = int(msg.split("|")[1].split(",")[1])
                     elif msg.split("|")[0] == "2":
-                        #-1的话是因为后面会有多出一个*
-                        #如果炸弹的x,y对不上该坐标将炸弹reomove掉,因为新加的炸弹在后面添加所以不会影响之前的炸弹的序号
+                    
                         if len(msg.split("|")[1].split("*"))-1!=self.robot_bomb:
                             self.map_data[int(msg.split("|")[1].split(",")[1])] = self.map_data[int(msg.split("|")[1].split(",")[1])][:int(msg.split("|")[1].split(",")[0])] + "3" + self.map_data[int(msg.split("|")[1].split(",")[1])][int(msg.split("|")[1].split(",")[0]) + 1:]
                             self.bomb.append(Bomb(int(msg.split("|")[1].split(",")[0]), int(msg.split("|")[1].split(",")[1]), self.screen, self.map_data, int(msg.split("|")[1].split(",")[2]), "123"))
@@ -110,7 +104,6 @@ class Game:
                         self.daoju_list.append(Daoju(self.screen,int(msg.split("|")[1].split(",")[0]),int(msg.split("|")[1].split(",")[1]),int(msg.split("|")[1].split(",")[2])))
                     elif msg.split("|")[0]=="6":
                         del self.daoju_list[int(msg.split("|")[1])]
-                    #1是移动 2是放置炸弹 3是人机位置 4是怪物炸弹 5是刷新道具 6是拾取道具 7是墙的摧毁
                     elif msg.split("|")[0]=="7":
                         del self.box_list[int(msg.split("|")[1])]
                 except:
@@ -123,7 +116,7 @@ class Game:
             try:
                 msg = self.client.recv(1024).decode("utf-8")
                 print(msg)
-                if msg.split("|")[0] == "1":#房间中的，，，
+                if msg.split("|")[0] == "1":
                     if msg.split("|")[1]=="Enter game":
                         self.jiemian=4
                     if msg.split("|")[1]=="msg":
@@ -133,13 +126,11 @@ class Game:
                             if msg.split("|")[2].split(".")[i] != "-1,no name,no ready":
                                 self.player_msg_list.append(player_icons(self.screen, int(msg.split("|")[2].split(".")[i].split(",")[0]),msg.split("|")[2].split(".")[i].split(",")[1], i,msg.split("|")[2].split(".")[i].split(",")[2]))
                         self.change_xinxi=False
-                elif msg.split("|")[0] == "2":#游戏中的....
-                    # 表示角色初始化的数据
-                    # split 不搞复杂 先| 在 . 在  ,取出你要的值
+                elif msg.split("|")[0] == "2":
+                    
                     if msg.split("|")[1] == "js":
                         print(msg)
-                        #                        x y   皮肤值   初始泡泡范围    名字
-                        #用名字给出自己的游戏对象
+                        
                         if self.player_index==0:
                             for i in range(0,len(msg.split("|")[2].split(".")) - 1):
                                 if msg.split("|")[2].split(".")[i].split(",")[4] == self.name:self.player_index = i
@@ -200,7 +191,7 @@ class Game:
                                 self.map_data[self.box_list[i].y]=self.map_data[self.box_list[i].y][:self.box_list[i].x]+"."+self.map_data[self.box_list[i].y][self.box_list[i].x+1:]
                                 self.box_list[i]="No"
                     elif msg.split("|")[1]=="bomb":
-                        #帧数不能从0开始
+                        
                         msg_index = 0
                         zhen = 0
                         if msg.split("|")[2]=="":
@@ -215,7 +206,7 @@ class Game:
                                 else:
                                     zhen+=1
                                     msg_index+=1
-                            #                 这样会把所有之前的泡泡重新爆炸一边= =
+                            
                             for i in range(zhen,len(msg.split("|")[2].split("."))-1):
                                 self.bomb.append(Bomb(int(msg.split("|")[2].split(".")[i].split(",")[1]),
                                                       int(msg.split("|")[2].split(".")[i].split(",")[2]),
@@ -227,11 +218,11 @@ class Game:
                 pass
     def clear(self):
         self.wall_list=[]
-        self.daoju_list=[]# 道具
-        self.robot_list=[]# 机器人
-        self.robot_bomb=[]# 机器人炸弹
-        self.box_list=[]# 箱子
-        self.bomb=[]#玩家炸弹
+        self.daoju_list=[]
+        self.robot_list=[]
+        self.robot_bomb=[]
+        self.box_list=[]
+        self.bomb=[]
         self.play_imformation_list=[]
         self.player_play_list=[]
     def load_data(self):
@@ -288,7 +279,7 @@ class Game:
         self.jiemian=-1
         if self.thread == None:
             self.thread=xianchen.Thread(target=self.connect, args=())
-            # 设置成守护线程
+            
             self.thread.setDaemon(True)
             self.thread.start()
         self.clear()
@@ -356,11 +347,7 @@ class Game:
             if self.jiemian!=-1:break
             pg.display.update()
     def duoren(self):
-        "准备是 44+159x  height 27"
-        '''
-        self.music = pg.mixer.music.load("image/2.mp3")
-        pg.mixer.music.play(-1)
-        '''
+        
         self.load_data()
         self.screen = pg.display.set_mode((1280, 768))
         self.chat_box=chat_box(self.screen,self,self.client,"client")
@@ -387,7 +374,7 @@ class Game:
             else:
                 self.draw()
                 self.update()
-                self.end_kuang.update()#结束框
+                self.end_kuang.update()
                 for event in pg.event.get():
                     if event.type == pg.QUIT:
                         quit()
@@ -420,7 +407,7 @@ class Game:
             self.draw()
             pg.display.update()
     def run(self):
-        #界面运行
+
         # Game loop
         while True:
             if self.jiemian==0:
@@ -452,7 +439,7 @@ class Game:
                                 for i in self.bomb:
                                     if i.x==self.player_play_list[self.player_index].x and i.y==self.player_play_list[self.player_index].y:
                                         shifang=True
-                            # 房主放置水泡发送给所有连接池的玩家       索引                             x                                      y                                fanwei
+                            # connect other player       index                             x                                      y                                fanwei
                             if not shifang:
                                 self.client.sendall(("2|bomb|"+str(self.player_play_list[self.player_index].x)+","+str(self.player_play_list[self.player_index].y)+","+str(self.player_play_list[self.player_index].fanwei)).encode("utf8"))
                             # self.client.sendall(("2|move|" + str(self.player_index) + "," + str(self.player_play_list[self.player_index].x) + "," + str(self.player_play_list[self.player_index].y) + ".").encode("utf8"))
@@ -484,7 +471,7 @@ class Game:
                                         move = True
                             if not move and self.map_data[self.player_play_list[self.player_index].y+1][self.player_play_list[self.player_index].x]=="." or self.map_data[self.player_play_list[self.player_index].y+1][self.player_play_list[self.player_index].x]=="3":
                                 self.client.sendall(("2|move|" + str(self.player_index) + "," + str(self.player_play_list[self.player_index].x) + "," + str(self.player_play_list[self.player_index].y+1) + ".").encode("utf8"))
-                # 客户端返送的时候是  索引值,x,y,1.(索引值和x和y还有角色拥有的泡泡范围)
+              
                 #self.client.sendall(("2|move|"+str(self.player_index)+","+str(self.player_play_list[self.player_index].x)+","+str(self.player_play_list[self.player_index].y)+".").encode("utf8"))
     def draw_grid(self):
         for x in range(0,WIDTH,TILESIZE):
@@ -503,48 +490,7 @@ class Game:
         for i in self.play_imformation_list:
             if i!=None:
                 i.update()
-        """
-        if len(self.box_list)>0:#箱子
-            for shu,i in enumerate(self.box_list):
-                if self.map_data[i.y][i.x]=="4":
-                    a = i.suiji()
-                    eat=False
-                    #遍历所有玩家,玩家吃到道具就break不然到最后一个玩家讲该道具放入道具list
-                    for player in self.player_play_list:
-                        if player.x == i.x and player.y == i.y:
-                            if a == 1:
-                                player.fanwei += 1
-                            elif a == 2:
-                                player.shuliang += 1
-                            eat=True
-                            break
-                        if (a == 1 or a == 2) and eat :
-                            self.jishu+=1
-                            self.daoju_sjb+=str(i.x) + "," + str(i.y) + "," + str(a)+"*"
-                            self.client.sendall(self.daoju_sjb.encode("utf8"))
-                            self.daoju_list.append(Daoju(self.screen, i.x, i.y, a))
-                        self.box_list.remove(i)
-                        self.box_sjb ="7|"
-                        for i in self.box_list:
-                            self.box_sjb+=str(i.x)+","+str(i.y)+"*"
-                        self.client.sendall(self.box_sjb.encode("utf8"))
-                else:
-                    i.update()
-        if len(self.bomb) > 0:#玩家炸弹
-            for i in self.bomb:
-                if i.time == 70:
-                    #self.map_data[i.y] = self.map_data[i.y][:i.x] + "." + self.map_data[i.y][i.x + 1:]
-                    self.bomb_shuliang-=1
-                if i.time == 0:
-                    for x, y in i.list():
-                        self.map_data[y] = self.map_data[y][:x] + "." + self.map_data[y][x + 1:]
-                else:
-                    if i.time == 70:# 时间
-                        for x,y in i.list():
-                            self.map_data[y]= self.map_data[y][:x] + "4" + self.map_data[y][x + 1:]
-                        if self.map_data[self.player_play.y][self.player_play.x] == "4":
-                            self.player_play.hurt()
-        """
+       
         if len(self.daoju_list)>0:
             for i in self.daoju_list:
                 i.update()
@@ -562,23 +508,10 @@ class Game:
             if i!=None:
                 i.update()
         # * after drawing everything , flip the display
-        """
-        if len(self.daoju_list)>0:
-            for a in self.daoju_list:
-                a.update()
-        if len(self.robot_list)>0:
-            for i in self.robot_list:
-                i.update(self.map_data)
-                self.msg += str(i.x) +","+ str(i.y) + "."
-                if i.fangzhi_zhadan():
-                    self.robot_bomb_sjb+=str(i.x)+","+str(i.y)+","+str(i.fanwei)+"*"
-                    self.client.sendall(self.robot_bomb_sjb.encode("utf8"))
-                    self.robot_bomb.append(Bomb(i.x,i.y,self.screen,self.map_data,i.fanwei,"guaishou"))
-                    self.map_data[i.y] = self.map_data[i.y][:i.x] + "3" + self.map_data[i.y][i.x + 1:]
-        """
+        
         self.chat_box.update()
     def wait_room(self):
-        #房间................
+        #room................
         pass
     def show_start_screen(self):
         # Game start screen
