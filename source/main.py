@@ -19,69 +19,62 @@ class Game:
         self.clock = pg.time.Clock()
         # Let the key press down
         pg.key.set_repeat(500, 100)
-        #main界面
+        #main interface
         self.mian_jiemian=pg.image.load("image/mainground.png")
         self.chuangjian_fj1=pg.image.load("BNB/xz1.png")
         self.chuangjian_fj2=pg.image.load("BNB/xz2.png")
         self.room=pg.image.load("BNB/room.png")
         self.black=pg.image.load("BNB/black.png")
         #
-        #创建房间初始化(你是房主)
-        self.thread=None#服务器线程!!!!!!!!!!!!!
+        #create the room and initialize as a room owner
+        self.thread=None#server thread!!!!!!!!!!!!!
         self.sever=None
         self.client=None
         self.msg=""
         self.lianjie=False
         self.box_msg=""
         self.playing=False
-        self.player_index=None# 判断哪个是你操控的对象
-        #聊天框+指令系统
+        self.player_index=None
+        #chat+command system
         self.chat_box=None
-        #房间玩家内容
+        #room player content
         self.player_msg_list=[]
-        #游戏人物信息框
+        #gamr role info
         self.play_imformation_list=[]
-        #开始游戏()这是游戏的玩家内容
         self.player_play_list=[]
-        #重要的数据包
-        # 1是移动 2是放置炸弹 3是人机位置 4是怪物炸弹 5是刷新道具 6是拾取道具 7是墙的摧毁
-        #用这种方式可以取消使用人物拾取道具的动作
-        #
+   
         self.zhen=255
-        #数据直接给sever就行了
+        #send data to sever
         self.play_imformation_kuang=pg.image.load("image/play_imformation/play information box.png")
         self.wall_list=[]
-        self.daoju_list=[]# 道具
-        self.robot_list=[]# 机器人
-        self.robot_bomb=[]# 机器人炸弹
-        self.box_list=[]# 箱子
+        self.daoju_list=[]# item
+        self.robot_list=[]# robot
+        self.robot_bomb=[]# robot's bomb
+        self.box_list=[]# box
 
         self.running = True
-        self.bomb=[]#玩家炸弹
+        self.bomb=[]#player's bomb
         self.cunfang=""
         self.bomb_shuliang=0
         self.jiemian=0
-        #玩家皮肤信息（游戏的）
+        #player's skin info
         self.player_play_list.append(Player(1,1,self.screen,1))
         self.name=""
         self.x=0
         self.jishu=0
         self.choice_name()
-        #房间的
+    
         self.player_msg_list.append(player_icons(self.screen, self.player_play_list[0].pifu,self.name,0,"fang zhu"))
         #32x24
         #pg.mixer.music.play(-1)
-        """
-        if pygame.mixer.music.get_busy() == False: #检查是否正在播放音乐
-            pygame.mixer.music.play() #开始播放音乐流
-        """
+ 
     def clear(self):
         self.wall_list=[]
-        self.daoju_list=[]# 道具
-        self.robot_list=[]# 机器人
-        self.robot_bomb=[]# 机器人炸弹
-        self.box_list=[]# 箱子
-        self.bomb=[]#玩家炸弹
+        self.daoju_list=[]
+        self.robot_list=[]
+        self.robot_bomb=[]
+        self.box_list=[]
+        self.bomb=[]
         self.play_imformation_list=[]
         self.player_play_list=[]
     def choice_name(self):
@@ -95,21 +88,15 @@ class Game:
             print("ok")
             while True:
                 try:
-                    """
-                        self.bomb_sjb="2|"#炸弹[数据包]
-                        self.daoju_sjb = "5|"  # 道具[数据包]
-                        self.robot_sjb = "3|"  # 机器人[数据包]
-                        self.robot_bomb_sjb = "4|"  # 机器人炸弹[数据包]
-                        self.box_sjb = "7|"  # 箱子[数据包]
-                    """
+                    #1 is move, 2 is to set the bomb, 3 is the robot location, 4 is the monster bob
+                    #5 is to refresh the items, 6 it to pick items, 7 it to destroy the wall
                     msg = self.client.recv(1024).decode("utf-8")
                     if msg.split("|")[0] == "1":
                         print(msg)
                         self.player_play1.x = int(msg.split("|")[1].split(",")[0])
                         self.player_play1.y = int(msg.split("|")[1].split(",")[1])
                     elif msg.split("|")[0] == "2":
-                        #-1的话是因为后面会有多出一个*
-                        #如果炸弹的x,y对不上该坐标将炸弹reomove掉,因为新加的炸弹在后面添加所以不会影响之前的炸弹的序号
+                        
                         if len(msg.split("|")[1].split("*"))-1!=self.robot_bomb:
                             self.map_data[int(msg.split("|")[1].split(",")[1])] = self.map_data[int(msg.split("|")[1].split(",")[1])][:int(msg.split("|")[1].split(",")[0])] + "3" + self.map_data[int(msg.split("|")[1].split(",")[1])][int(msg.split("|")[1].split(",")[0]) + 1:]
                             self.bomb.append(Bomb(int(msg.split("|")[1].split(",")[0]), int(msg.split("|")[1].split(",")[1]), self.screen, self.map_data, int(msg.split("|")[1].split(",")[2]), "123"))
@@ -124,8 +111,7 @@ class Game:
                     elif msg.split("|")[0]=="5":
                         self.daoju_list.append(Daoju(self.screen,int(msg.split("|")[1].split(",")[0]),int(msg.split("|")[1].split(",")[1]),int(msg.split("|")[1].split(",")[2])))
                     elif msg.split("|")[0]=="6":
-                        del self.daoju_list[int(msg.split("|")[1])]
-                    #1是移动 2是放置炸弹 3是人机位置 4是怪物炸弹 5是刷新道具 6是拾取道具 7是墙的摧毁
+                        del self.daoju_list[int(msg.split("|")[1])]                    
                     elif msg.split("|")[0]=="7":
                         del self.box_list[int(msg.split("|")[1])]
                 except:
@@ -147,7 +133,6 @@ class Game:
             for col, tile in enumerate(tiles):
                 if tile == '1':
                     self.wall_list.append(Wall(self.screen,col,row,"wall"))
-                # 其他的用不到的我不用继承了,1麻烦2写不出太突出的东西
                 elif tile == "a":
                     self.box_list.append(Box(self.screen,col,row,self.sever.duixiang_index[1],"box"))
                     self.sever.box_msg+=str(self.sever.duixiang_index[1])+"."
@@ -157,7 +142,6 @@ class Game:
             for col, tile in enumerate(tiles):
                 if tile == '2':
                     self.wall_list.append(Wall(self.screen,col,row,"stone"))
-                # 其他的用不到的我不用继承了,1麻烦2写不出太突出的东西
                 elif tile == "b":
                     self.box_list.append(Box(self.screen,col,row,1,"orange_box"))
                 elif tile=="c":
@@ -201,7 +185,7 @@ class Game:
             self.thread.start()
         self.index=0
         self.zhen=280
-        # 设置成守护线程
+        # set the thread
         while True:
             if self.zhen >= 0:
                 self.zhen -= 3
@@ -239,8 +223,8 @@ class Game:
                                     if self.sever.js_xinxi.split("|")[2].split(".")[i]!="-1,no name,no ready":
                                         if i!=0:
                                             self.player_play_list.append(Player(1,1,self.screen,int(self.sever.js_xinxi.split("|")[2].split(".")[i].split(",")[0])))
-                                            #                        x y   皮肤值   初始泡泡范围    名字
-                                        #初始数据
+                                            #                        x y   skin_value   initial_bomb_range    name
+                                        #initialize the data
                                         self.sever.play_player_move+="1,1."
                                         self.sever.player_imformation_msg+=self.sever.js_xinxi.split("|")[2].split(".")[i].split(",")[0]+self.sever.js_xinxi.split("|")[2].split(".")[i].split(",")[1]+"."
                                         self.sever.play_player_msg+="1,1,"+self.sever.js_xinxi.split("|")[2].split(".")[i].split(",")[0]+","+"1,"+self.sever.js_xinxi.split("|")[2].split(".")[i].split(",")[1]+","+str(i)+"."
@@ -289,11 +273,7 @@ class Game:
             if self.jiemian!=-1:break
             pg.display.update()
     def duoren(self):
-        "准备是 44+159x  height 27"
-        '''
-        self.music = pg.mixer.music.load("image/2.mp3")
-        pg.mixer.music.play(-1)
-        '''
+
         self.load_data()
         self.screen = pg.display.set_mode((1280, 768))
         self.chat_box=chat_box(self.screen,self,self.sever,"sever")
@@ -320,7 +300,7 @@ class Game:
             else:
                 self.draw()
                 self.update()
-                self.end_kuang.update()#结束框
+                self.end_kuang.update()#end game image
                 if self.end_time>=0:
                     self.end_time-=1
                 else:
@@ -337,7 +317,7 @@ class Game:
             self.clock.tick(FPS)
             pg.display.update()
     def run(self):
-        #界面运行
+        #interface running
         # Game loop
         while True:
             if self.jiemian==0:
@@ -351,7 +331,7 @@ class Game:
             elif self.jiemian==4:
                 self.duoren()
     def update(self):
-        #在游戏里面没啥作用的
+
         for i in self.wall_list:
             i.update()
         self.screen.blit(self.play_imformation_kuang,(1024,0))
@@ -376,7 +356,7 @@ class Game:
                                 for i in self.bomb:
                                     if i.x==self.player_play_list[0].x and i.y==self.player_play_list[0].y:
                                         shifang=True
-                            # 房主放置水泡发送给所有连接池的玩家       索引                             x                                      y                                fanwei
+                                                                        
                             if not shifang :
                                 self.sever.bomb_msg+=str(self.sever.duixiang_index[0])+","+str(self.player_play_list[0].x)+","+str(self.player_play_list[0].y)+","+str(self.player_play_list[0].fanwei)+"."
                                 self.sever.send_player(self.sever.bomb_msg)
@@ -410,7 +390,7 @@ class Game:
                                         move = True
                             if not move and self.map_data[self.player_play_list[0].y+1][self.player_play_list[0].x ] =="." or self.map_data[self.player_play_list[0].y+1][self.player_play_list[0].x ] =="3":
                                     self.player_play_list[0].move (dy=1)
-                    # 人物移动的格式为x,y,1.(x和y还有角色拥有的泡泡范围)
+                    # players movement as x,y,1.(x and y and bomb range)
                     #print("self.sever.play_player_msg"+self.sever.play_player_msg)
                     if len(self.daoju_list)>0:
                         daoju_msg = "2|property|"
@@ -476,15 +456,15 @@ class Game:
                         for box in self.box_list:
                             if box!=None:
                                 if x==box.x and y==box.y:
-                                    #激活box的动画动画结束在box里面删除
+                                    #delete the box after the animination
                                     box_die_pd=True
                                     box.die=1
                                     box_die_msg +=str(box.xuhao)+"."
                                     break
                     if box_die_pd:
                         self.sever.send_player(box_die_msg)
-                    #删除箱子且箱子渲染动画
-                    # 删除时间0的泡泡
+                   
+                    # delete the bomb with time 0
                 if i.time == 0:
                     bomb_msg="2|bomb|"
                     self.bomb.remove(i)
@@ -649,11 +629,10 @@ class Game:
                         for box in self.box_list:
                             if box != None:
                                 if x == box.x and y == box.y:
-                                    # 激活box的动画动画结束在box里面删除
+                                
                                     box.die = 1
                                     break
-                    #删除箱子且箱子渲染动画
-                    # 删除时间0的泡泡
+            
                 if i.time == 0:
                     self.bomb.remove(i)
         self.player.update()
@@ -702,42 +681,42 @@ class Sever():
         self.duixiang=duixiang
         self.duixiang.sever=self
         print(self.duixiang.sever)
-        self.ADDRESS =(ADDRESS,5000)  # 绑定地址("x.xxx.xxx.xxx",5000)
-        self.g_socket_server = None  # 负责监听的socket
-        self.g_conn_pool = []  # 联机泡泡堂的连接池
+        self.ADDRESS =(ADDRESS,5000)  # SET THE ADDRESS HERE("x.xxx.xxx.xxx",5000)
+        self.g_socket_server = None  # the listening socket
+        self.g_conn_pool = []  #the connect pool
         #
-        self.js_xinxi="1|msg|"# 玩家角色信息(进入游戏将部分信息转换成游戏对象)
+        self.js_xinxi="1|msg|"# player's info
         self.js_xinxi+=str(self.duixiang.player_play_list[0].pifu)+","+self.duixiang.name+","+"no ready"+"."
-        #             角色信息,名字,是否准备
+        #             role info, name, ready?
         self.js_xinxi+= "-1,no name,no ready.-1,no name,no ready.-1,no name,no ready.-1,no name,no ready.-1,no name,no ready.-1,no name,no ready.-1,no name,no ready."
         self.play_msg_list=[]
         #
-        #1是没有进游戏的时候,2是进游戏的时候
+        #1 is when not entering the game,2 is when entering the game
 
-        self.play_player_msg="2|js|"# 玩家[数据包][存放]{前面是2|js| 后面是2|move|}
-        self.player_imformation_msg="2|imformation|"#存放人物信息列表框
-        self.play_player_move="2|move|"#玩家移动
-        self.play_life_msg="2|life|"#玩家状态数据
-        self.bomb_msg="2|bomb|"# 炸弹[数据包]
-        self.daoju_msg = "2|property|"  # 道具[数据包]
-        self.box_msg = "2|box|"  # 箱子[数据包]
+        self.play_player_msg="2|js|"
+        self.player_imformation_msg="2|imformation|"
+        self.play_player_move="2|move|"
+        self.play_life_msg="2|life|"
+        self.bomb_msg="2|bomb|"
+        self.daoju_msg = "2|property|" 
+        self.box_msg = "2|box|"  
         #                 bomb_index,box_index,property_index
         self.duixiang_index=[0,0,0]
         self.init()
         self.accept_client()
     def init(self):
-        # 初始化服务端
+        # initialize the server
         self.g_socket_server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.g_socket_server.bind(self.ADDRESS)
         self.g_socket_server.listen(5)
     def clear(self):
-        self.play_player_msg="2|js|"# 玩家[数据包][存放]
-        self.player_imformation_msg="2|imformation|"#存放人物信息列表框
-        self.play_player_move="2|move|"#玩家移动
-        self.play_life_msg="2|life|"#玩家状态数据
-        self.bomb_msg="2|bomb|"# 炸弹[数据包]
-        self.daoju_msg = "2|property|"  # 道具[数据包]
-        self.box_msg = "2|box|"  # 箱子[数据包]
+        self.play_player_msg="2|js|"
+        self.player_imformation_msg="2|imformation|"
+        self.play_player_move="2|move|"
+        self.play_life_msg="2|life|"
+        self.bomb_msg="2|bomb|"
+        self.daoju_msg = "2|property|"  
+        self.box_msg = "2|box|"  
         #                 bomb_index,box_index,property_index
         self.duixiang_index=[0,0,0]
     def return_g_conn_pool(self):
@@ -749,16 +728,16 @@ class Sever():
                 i.sendall(msg.encode("utf8"))
                 time.sleep(0.005)
     def accept_client(self):
-        # 接收新连接
+        # accept the new connection
         join=False
         while True:
-            client,ip = self.g_socket_server.accept()  # 阻塞，等待客户端连接
-            # 加入连接池
-            print('链接+'+str(self.duixiang.playing))
+            client,ip = self.g_socket_server.accept()  #stop and wait for the server th connect
+            # join the connect pool
+            print('connect+'+str(self.duixiang.playing))
             if len(self.g_conn_pool)<=7 and not self.duixiang.playing :
                 self.g_conn_pool.append(client)
                 msg=client.recv(2048).decode(encoding="utf-8")
-                js_xinxi = "1|msg|"  # 玩家角色信息(进入游戏将部分信息转换成游戏对象)
+                js_xinxi = "1|msg|"  # role info
                 biaoji=False
                 xuhao=-10
                 for i in range(0,len(self.js_xinxi.split("|")[2].split("."))-1):
@@ -772,7 +751,7 @@ class Sever():
                 self.js_xinxi=js_xinxi
                 self.duixiang.jiexi(self.js_xinxi)
                 thread = xianchen.Thread(target=self.message_handle, args=(client,xuhao))
-                # 设置成守护线程
+                # thread setting
                 thread.setDaemon(True)
                 thread.start()
                 self.send_player(js_xinxi)
@@ -783,7 +762,7 @@ class Sever():
     def message_handle(self,client,wz):
         while True:
             try:
-                bytes = client.recv(2048).decode("utf8")  # 接收客户端消息
+                bytes = client.recv(2048).decode("utf8")  # receive the server
                 print(bytes)
                 if str(bytes).split("|")[0]=="1":
                     js_xinxi = "1|msg|"
@@ -810,7 +789,7 @@ class Sever():
                         if daoju_msg!=self.daoju_msg:
                             self.send_player(daoju_msg)
                             self.daoju_msg=daoju_msg
-                        #以下重构所有角色 位置 的数据包
+                        
                         js_xinxi = "2|move|"
                         for i in range(0,len(self.play_player_move.split("|")[2].split("."))-1):
                             if int(str(bytes).split("|")[2].split(",")[0])==i:
@@ -835,8 +814,8 @@ class Sever():
                         self.duixiang.chat_box.add_information(str(bytes).split("|")[2])
                         self.send_player(bytes)
             except :
-                #无
-                if not self.duixiang.playing:#在房间
+                
+                if not self.duixiang.playing:#in the room
                     js_xinxi = "1|msg|"
                     for i in range(0,len(self.js_xinxi.split("|")[2].split("."))-1):
                         if i!=wz:
@@ -847,8 +826,8 @@ class Sever():
                     self.duixiang.jiexi(self.js_xinxi)
                     self.g_conn_pool.remove(client)
                     self.send_player(self.js_xinxi)
-                else:#在游戏里面
-                    print("掉线")
+                else:#in the game
+                    print("Off line")
                     self.g_conn_pool.remove(client)
                     js_xinxi = "1|msg|"
                     for i in range(0,len(self.js_xinxi.split("|")[2].split("."))-1):
@@ -859,10 +838,10 @@ class Sever():
                     self.js_xinxi=js_xinxi
                     self.duixiang.jiexi(self.js_xinxi)
                     print("js_xinxi"+self.js_xinxi)
-                    play_player_msg = "2|js|"  # 玩家[数据包][存放]{前面是2|js| 后面是2|move|}
-                    player_imformation_msg = "2|imformation|"  # 存放人物信息列表框
-                    play_player_move = "2|move|"  # 玩家移动
-                    play_life_msg = "2|life|"  # 玩家状态数据
+                    play_player_msg = "2|js|"  
+                    player_imformation_msg = "2|imformation|"  
+                    play_player_move = "2|move|"  
+                    play_life_msg = "2|life|"  
                     for i in range(0,len(self.play_player_msg.split("|")[2].split("."))-1):
                         if self.play_player_msg.split("|")[2].split(".")[i]=="None" :
                             play_player_msg += "None."
