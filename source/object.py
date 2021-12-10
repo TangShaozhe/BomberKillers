@@ -9,12 +9,9 @@ class Player():
     def __init__(self, x, y,screen,pifu):
         self.screen = screen
         self.die_image=[]
-        self.die=0#0表示活着 1表示在泡泡里 2表示死亡
+        self.die=0
         self.pifu=pifu
-        """
-        宝宝初始 泡泡个数 泡泡范围 1  1 完美是 5   7
-        蓝蓝初始 泡泡个数 泡泡范围 2  1 完美是 7   5
-        """
+
         self.image=None
         if self.pifu==1:
             self.die_image=[pygame.image.load("image/baobao/1.png"),pygame.image.load("image/baobao/1.png"),pygame.image.load("image/baobao/2.png"),pygame.image.load("image/baobao/3.png"),
@@ -46,10 +43,10 @@ class Player():
         self.shanshuo_zhen = 0
         self.cishu = 15
         self.time = 8
-        self.fanwei = 5#炸弹范围
-        self.shuliang = 1#炸弹数量
+        self.fanwei = 5#bomb range
+        self.shuliang = 1#bomb number
         self.pifu=pifu
-        #17帧是被怪物和人撞到的效果
+   
     # move the player function
     def move(self, dx=0, dy=0):
         self.x += dx
@@ -104,7 +101,7 @@ class Wall():
 class Play_imformation():
     def __init__(self,screen,js_leixing,name,xuhao):
         self.screen=screen
-        self.zhuang_tai=0 #0为正常1为哭泣状态
+        self.zhuang_tai=0 #0 is normal, 1 is player's crying
         self.js=None
         self.js_die=None
         if js_leixing==1:
@@ -134,7 +131,7 @@ class player_icons():
         self.ready=False
         if zhunbei=="ready":self.ready=True
         self.screen=screen
-        self.xuhao=xh#表示位置
+        self.xuhao=xh#location
         if pifu==1:
             self.hero_icon=pygame.image.load("BNB/baobao.png")
         else:
@@ -143,7 +140,7 @@ class player_icons():
         self.rect.x = 45 + 159 * xh + 6
         self.rect.y = 280 + 220 * (self.xuhao //4) - self.rect.height
     def update(self):
-        #名字和角色都渲染
+        
         self.screen.blit(self.hero_icon,(self.rect.x,self.rect.y))
         self.screen.blit(self.name_message,(52+160*self.xuhao,300+220*(self.xuhao //4)))
         #74 327
@@ -165,7 +162,7 @@ class Box():
         self.time=0
         self.x = x
         self.y = y
-        self.die=0# 0为正常 1为被水泡炸到后的效果 2为效果结束[删除]
+        self.die=0
         self.daoju=random.randint(1,6)
     def update(self):
         if self.die==0:
@@ -203,24 +200,24 @@ class Bomb():
         for i in range(1,5):
             self.baozha_image.append(pg.image.load("image/xiaoguo-"+str(i)+".png"))
         self.donghua_time=0
-        self.zhen=0#泡泡动画帧数
-        self.time=250#爆炸time
+        self.zhen=0
+        self.time=250
         self.x=x
         self.y=y
-        self.fanwei=fanwei#泡泡范围
+        self.fanwei=fanwei
         self.left=-self.fanwei
         self.right=self.fanwei+1
         self.top=-self.fanwei
         self.down=self.fanwei+1
         self.baozha_list=[]
-        self.Indestructible_Cube="12456789"# 不可被炸方块 3是表示爆炸
-        self.Explosive_Cube="abcdcfg"# 可被炸方块
+        self.Indestructible_Cube="12456789"
+        self.Explosive_Cube="abcdcfg"
         #self.baozha_list=[]
         #32x32
     def list(self):
         return self.baozha_list
     def update(self):
-        #4边检查箱子就不要-1
+        
         self.time-=1
         if self.time==60:
             for i in range(-1,-1*self.fanwei-1,-1):
@@ -295,15 +292,15 @@ class Bomb():
 
 
 class Robot():
-    def __init__(self,screen,ditu,zt):#人机自带x,y不需要
+    def __init__(self,screen,ditu,zt):
         self.screen=screen
         self.ditu=ditu
-        self.zt=zt#状态的话 1是 动的 2 是通过传输信息给人机位置
+        self.zt=zt#robot state 1 is move 2 is to pass the info to robot
         self.y=random.randint(1,len(self.ditu)-1)
         self.image=pg.image.load("image/monster.png")
         self.image1=pg.image.load("image/monster1.png")
-        self.hp=2#代表血量
-        self.fx=0#表示方向
+        self.hp=2#blood
+        self.fx=0#direction
         self.time=100
         self.shanshuo_zhen = 0
         self.cishu = 15
@@ -369,13 +366,13 @@ class Daoju():
         self.index=index
         self.x=x
         self.y=y
-        self.pianyi=0#y轴移动
+        self.pianyi=0
         self.bianliang=0.15
         self.daoju=None
         self.id=id
-        if self.id==1:#1为炸弹数量
+        if self.id==1:#1 is bomb number
             self.daoju=self.image
-        elif self.id==2:#2为炸弹范围
+        elif self.id==2:#2 is bomb range
             self.daoju=self.image1
     def update(self):
         if self.pianyi<=-15 or self.pianyi>=0:
@@ -392,16 +389,16 @@ class Daoju():
 class chat_box():
     def __init__(self,screen,duixiang,sever,sf):
         self.sf=sf
-        self.screen=screen#当前窗口
-        self.sever=sever#绑定服务器实现指令传输
-        self.duixiang=duixiang#游戏类
+        self.screen=screen#current windows
+        self.sever=sever
+        self.duixiang=duixiang#
         self.ground=pg.image.load("image/black.png")
-        self.chat_list=[]#记录信息update便利渲染
-        self.name=self.duixiang.name #记录的是自己的游戏名字
+        self.chat_list=[]
+        self.name=self.duixiang.name #record game name
         self.useing=False
         self.current_content=""
         self.content_update=None
-        #初始化字体类型
+
         self.my_font = pygame.font.SysFont('SimHei', 35)
         self.time=100
     def update(self):
@@ -419,7 +416,7 @@ class chat_box():
         if event_val==13:
             if self.useing:
                 if len(self.current_content)>0:
-                    #根据指令信息判断
+                 
                     if self.sf=="sever":
                         if len(self.chat_list) < 6:
                             self.chat_list.append(
@@ -476,7 +473,7 @@ class ghost():
         self.time=30
         self.zhen=0
         self.fx=0
-        self.jineng_time=10#冲刺时间倒计时
+        self.jineng_time=10#rush time
         self.use_jineng=False
         self.chongci_donghua=False
         self.die=0
@@ -487,7 +484,7 @@ class ghost():
             self.right_image.append(pg.image.load("image/ghost/youling_you"+str(i)+".png"))
             self.top_image.append(pg.image.load("image/ghost/youling_shang"+str(i)+".png"))
             self.down_image.append(pg.image.load("image/ghost/youling_xia"+str(i)+".png"))
-        self.use_image=self.down_image[0]#默认为正面
+        self.use_image=self.down_image[0]
         for i in range(3,0,-1):
             self.die_image.append(pg.image.load("image/ghost/youling_xiaoguo"+str(i)+".png"))
     def update(self):
@@ -604,7 +601,7 @@ class end_kuang():
         self.win_index=xuhao
         self.x = 150
         self.y = 120
-        #按顺序为 结束框 胜利 min胜利 失败 min失败
+        
         self.End_Interface=pg.image.load("image/end/End Interface.png")
         self.victory=pg.image.load("image/end/victory.png")
         self.small_vicroty=pg.image.load("image/end/small_victory.png")
