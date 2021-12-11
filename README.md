@@ -43,3 +43,15 @@ Two Player - Fight off each other! (continuing)
  - Arrow Keys and WASD to move 
  - Left Shift and Right Shift to drop balloons
  - Left control and space bar to use items 
+
+
+## Issues ##
+For people who have no program knowledge, you can just download the Released zip package and BomberKiller.zip to play the game
+After extracting it, just click the exe file to run.
+
+When starting the game, the first view is in the login interface, you need to wait for several seconds and then choose single or multli play!
+As long as all the monsters did in single play or only one player left, the winner will be announced and the game finished.
+
+How to run the multiple gameplay? Check the process in the github-Issues or just click this:
+https://github.com/Tang634724712/BomberKillers/issues/15
+
