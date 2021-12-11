@@ -147,8 +147,8 @@ class Game:
                 elif tile=="c":
                     self.box_list.append(Box(self.screen,col,row,1,"red_box"))
     def main_jiemian(self):
-        #self.music=pg.mixer.music.load("image/1.mp3")
-        #pg.mixer.music.play(-1)
+        self.music=pg.mixer.music.load("image/1.mp3")
+        pg.mixer.music.play(-1)
         self.screen = pg.display.set_mode((800, 600))
         self.jiemian=0
         while True:
@@ -177,6 +177,8 @@ class Game:
                     if self.jiemian!=0:break
                 pg.display.update()
     def game_room(self):
+        self.music=pg.mixer.music.load("image/ready.mp3")
+        pg.mixer.music.play(-1)
         self.screen = pg.display.set_mode((1202, 900))
         self.jiemian=-1
         if self.thread == None:
@@ -273,7 +275,8 @@ class Game:
             if self.jiemian!=-1:break
             pg.display.update()
     def duoren(self):
-
+        self.music=pg.mixer.music.load("image/game.mp3")
+        pg.mixer.music.play(-1)
         self.load_data()
         self.screen = pg.display.set_mode((1280, 768))
         self.chat_box=chat_box(self.screen,self,self.sever,"sever")
@@ -506,8 +509,8 @@ class Game:
                 self.sever.send_player(self.sever.play_life_msg)
         self.draw_grid()
     def danren(self):
-        #self.music=pg.mixer.music.load("image/2.mp3")
-        #pg.mixer.music.play(-1)
+        self.music=pg.mixer.music.load("image/single game.mp3")
+        pg.mixer.music.play(-1)
         self.screen = pg.display.set_mode((561, 495))
         self.wall_list=[]
         self.box_list=[]
@@ -681,7 +684,7 @@ class Sever():
         self.duixiang=duixiang
         self.duixiang.sever=self
         print(self.duixiang.sever)
-        self.ADDRESS =(ADDRESS,5000)  # SET THE ADDRESS HERE("x.xxx.xxx.xxx",5000)
+        self.ADDRESS =("192.168.0.178",5000)  # SET THE ADDRESS HERE("x.xxx.xxx.xxx",5000)
         self.g_socket_server = None  # the listening socket
         self.g_conn_pool = []  #the connect pool
         #

@@ -110,7 +110,7 @@ class Game:
                     pass
     def connect(self):
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.client.connect(("192.168.1.103", 5000))
+        self.client.connect(("192.168.0.178", 5000))
         self.client.sendall((("1|init|"+str(2)+","+self.name+",no ready")+".").encode("utf8"))
         while True:
             try:
